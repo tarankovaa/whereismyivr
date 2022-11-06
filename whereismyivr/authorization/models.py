@@ -1,9 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import RegexValidator
-
-alphanumeric_underscore = RegexValidator(r'^[_0-9a-zA-Z]{5,}$',
-                                         'Only alphanumeric characters and underscores are allowed.')
+from .validators import alphanumeric_underscore
 
 
 class Profile(models.Model):
@@ -24,7 +21,7 @@ class Profile(models.Model):
     profile_type = models.CharField(
         "Тип профиля",
         max_length=2,
-        blank=False,
+        blank=True,
         choices=PROFILE_TYPE_CHOICES)
 
     telegram_username = models.CharField(

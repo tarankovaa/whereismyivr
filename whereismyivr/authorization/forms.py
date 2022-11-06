@@ -65,6 +65,14 @@ class LoginForm(AuthenticationForm):
 
 
 class ProfileForm(ModelForm):
+    CUSTOMER = "CU"
+    CONSULTANT = "CO"
+    PERFORMER = "PE"
+    PROFILE_TYPE_CHOICES = [
+        (PERFORMER, "Исполнитель"),
+        (CUSTOMER, "Заказчик"),
+        (CONSULTANT, "Консультант"),
+    ]
     first_name = forms.CharField(max_length=50,
                                  required=True,
                                  widget=forms.TextInput(attrs={
@@ -94,6 +102,12 @@ class ProfileForm(ModelForm):
                 'placeholder': 'Введите ваш ник в VK',
             }),
         }
+
+    def clean_profile_type(self):
+        data = self.cleaned_data['profile_type']
+        if not data:
+            raise forms.ValidationError("This field cannot be empty")
+        return data
 
 
 '''class UserEmailForm(ModelForm):
