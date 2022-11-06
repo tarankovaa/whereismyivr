@@ -8,6 +8,7 @@
     {{ form.password }}<br>
     <label>{{ form.remember_me }}
         Запомнить меня</label><br><br>
-    <button type="submit" class="btn btn-success">Войти</button>
+    <button type="submit" class="btn btn-success">Войти</button><br><br>
+    <a href="{% url 'password_reset' %}"><i>Forgot Password?</i></a>
 </form>
 {% endblock %}

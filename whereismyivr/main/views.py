@@ -14,7 +14,7 @@ def index(request):
 
 class CreateCardView(View):
     form_class = CreateCardForm
-    template_name = 'main/create-card.html'
+    template_name = 'main/create_card.html'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()

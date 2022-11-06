@@ -9,6 +9,7 @@ from .models import Profile
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(required=True,
+                             # validators=[validate_email],
                              widget=forms.EmailInput(attrs={
                                  'class': 'form-control',
                                  'placeholder': 'Введите электронную почту',
@@ -35,6 +36,12 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("email", "username", "password1", "password2")
+
+    def clean_email(self):
+        data = self.cleaned_data['email']
+        if User.objects.filter(email=data).exists():
+            raise forms.ValidationError("This email already used")
+        return data
 
 
 class LoginForm(AuthenticationForm):
