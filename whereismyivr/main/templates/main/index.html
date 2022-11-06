@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<ul class="list-group">
+    {% for card in cards %}
+    <li class="list-group-item">
+        <p class="h5">{{ card.title }}</p>
+        <p>{{ card.get_type_of_app }}</p>
+        <p>{{ card.get_search_for }}</p>
+        <p>{{ card.product_image }}</p>
+        <p>{{ card.created_on }}</p>
+        <p>{{ card.user }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

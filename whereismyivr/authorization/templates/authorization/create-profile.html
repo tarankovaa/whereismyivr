@@ -1,0 +1,15 @@
+{% extends "authorization/base.html" %}
+
+{% block content %}
+<h1>Создание профиля</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.first_name }}<br>
+    {{ form.last_name }}<br>
+    {{ form.profile_pic }}<br>
+    {{ form.profile_type }}<br>
+    {{ form.telegram_username }}<br>
+    {{ form.vk_username }}<br>
+    <button type="submit" class="btn btn-success">Подтвердить</button>
+</form>
+{% endblock %}

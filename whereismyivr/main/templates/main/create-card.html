@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<h1>Создание карточки</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.title }}<br>
+    {{ form.type_of_app }}<br>
+    {{ form.customer }}<br>
+    {{ form.consultant }}<br>
+    {{ form.performer }}<br>
+    {{ form.partner }}<br>
+    {{ form.product_image }}<br>
+    <button type="submit" class="btn btn-success">Подтвердить</button>
+</form>
+{% endblock %}
