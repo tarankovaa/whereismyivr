@@ -32,4 +32,6 @@ class CreateCardView(View):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('login')
+        if not request.user.profile.is_filled:
+            return redirect('home')
         return super(CreateCardView, self).dispatch(request, *args, **kwargs)

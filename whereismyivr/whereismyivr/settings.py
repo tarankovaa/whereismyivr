@@ -124,7 +124,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'create_profile'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = '/'
 

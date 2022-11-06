@@ -33,6 +33,8 @@ class SignupView(View):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+            profile = Profile.objects.create(user=user)
+            profile.save()
             activateEmail(request, user, form.cleaned_data.get('email'))
             return redirect('home')
         return render(request, self.template_name, {'form': form})
@@ -68,7 +70,7 @@ class CreateProfileView(View):
             user = request.user
             user.first_name = form.cleaned_data.get('first_name')
             user.last_name = form.cleaned_data.get('last_name')
-            profile = Profile.objects.create(user=request.user)
+            profile = user.profile
             profile.profile_pic = form.cleaned_data.get('profile_pic')
             profile.profile_type = form.cleaned_data.get('profile_type')
             profile.telegram_username = form.cleaned_data.get('telegram_username')
@@ -80,13 +82,9 @@ class CreateProfileView(View):
         return render(request, self.template_name, {'form': form})
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('login')
-        try:
-            if request.user.profile.is_filled:
-                return redirect('home')
-        finally:
-            return super(CreateProfileView, self).dispatch(request, *args, **kwargs)
+        if not request.user.is_authenticated or request.user.profile.is_filled:
+            return redirect('home')
+        return super(CreateProfileView, self).dispatch(request, *args, **kwargs)
 
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
