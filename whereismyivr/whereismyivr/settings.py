@@ -76,7 +76,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'whereismyivr_db',
-        'USER': 'test',
+        'USER': 'root',
         'PASSWORD': '12345678',
         'HOST': 'localhost',
         'PORT': '3306',

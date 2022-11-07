@@ -3,47 +3,37 @@
 {% block content %}
 
 <nav class="navbar navbar-expand-md my-3">
-    {% if search == 'customer' %}
     <div class="navbar-nav ml-auto">
+        {% if search %}
         <a href="{% url 'home' %}" class="nav-item nav-link">Все</a>
+        {% if search == 'customer' %}
         <a href="/search/customer" class="nav-item nav-link" style="color: #106dff;">Поиск заказчика</a>
-        <a href="/search/consultant" class="nav-item nav-link">Поиск консультанта</a>
-        <a href="/search/performer" class="nav-item nav-link">Поиск исполнителя</a>
-        <a href="/search/partner" class="nav-item nav-link">Поиск напарника</a>
-    </div>
-    {% elif search == 'consultant' %}
-    <div class="navbar-nav ml-auto">
-        <a href="{% url 'home' %}" class="nav-item nav-link">Все</a>
+        {% else %}
         <a href="/search/customer" class="nav-item nav-link">Поиск заказчика</a>
+        {% endif %}
+        {% if search == 'consultant' %}
         <a href="/search/consultant" class="nav-item nav-link" style="color: #106dff;">Поиск консультанта</a>
-        <a href="/search/performer" class="nav-item nav-link">Поиск исполнителя</a>
-        <a href="/search/partner" class="nav-item nav-link">Поиск напарника</a>
-    </div>
-    {% elif search == 'performer' %}
-    <div class="navbar-nav ml-auto">
-        <a href="{% url 'home' %}" class="nav-item nav-link">Все</a>
-        <a href="/search/customer" class="nav-item nav-link">Поиск заказчика</a>
+        {% else %}
         <a href="/search/consultant" class="nav-item nav-link">Поиск консультанта</a>
+        {% endif %}
+        {% if search == 'performer' %}
         <a href="/search/performer" class="nav-item nav-link" style="color: #106dff;">Поиск исполнителя</a>
-        <a href="/search/partner" class="nav-item nav-link">Поиск напарника</a>
-    </div>
-    {% elif search == 'partner' %}
-    <div class="navbar-nav ml-auto">
-        <a href="{% url 'home' %}" class="nav-item nav-link">Все</a>
-        <a href="/search/customer" class="nav-item nav-link">Поиск заказчика</a>
-        <a href="/search/consultant" class="nav-item nav-link">Поиск консультанта</a>
+        {% else %}
         <a href="/search/performer" class="nav-item nav-link">Поиск исполнителя</a>
+        {% endif %}
+        {% if search == 'partner' %}
         <a href="/search/partner" class="nav-item nav-link" style="color: #106dff;">Поиск напарника</a>
-    </div>
-    {% else %}
-    <div class="navbar-nav ml-auto">
+        {% else %}
+        <a href="/search/partner" class="nav-item nav-link">Поиск напарника</a>
+        {% endif %}
+        {% else %}
         <a href="{% url 'home' %}" class="nav-item nav-link" style="color: #106dff;">Все</a>
         <a href="/search/customer" class="nav-item nav-link">Поиск заказчика</a>
         <a href="/search/consultant" class="nav-item nav-link">Поиск консультанта</a>
         <a href="/search/performer" class="nav-item nav-link">Поиск исполнителя</a>
         <a href="/search/partner" class="nav-item nav-link">Поиск напарника</a>
+        {% endif %}
     </div>
-    {% endif %}
 </nav>
 {% if request.user.is_authenticated %}
 <form method="POST" class="mb-4">
@@ -217,31 +207,31 @@
 <div class="col-lg-7">
     <div class="card shadow-lg border-0 rounded-lg mt-2 mb-4">
         <div class="card-header">
-            <h3 class="font-weight-light my-2">{{ card.title }}</h3>
+            <h3 class="col-lg-11 font-weight-light my-2 word-break">{{ card.title }}</h3>
         </div>
         <div class="card-body">
-            <div class="col-md-10 mb-1">
+            <div class="col-lg-11 mb-1">
                 <div>
                     <label class="small">Тип заявки:</label>
                 </div>
                 <label class="mb-1">{{ card.get_type_of_card }}</label>
             </div>
             <hr>
-            <div class="col-md-10 mb-1">
+            <div class="col-lg-11 mb-1">
                 <div>
                     <label class="small">Область:</label>
                 </div>
                 <label class="mb-1">{{ card.get_field_of_card }}</label>
             </div>
             <hr>
-            <div class="col-md-10 mb-1">
+            <div class="col-lg-11 mb-1">
                 <div>
-                    <label class="small text-break">Образ продукта:</label>
+                    <label class="mb-1 small word-break">Образ продукта:</label>
                 </div>
-                <label class="mb-1">{{ card.product_image }}</label>
+                <label class="mb-1">{{ card.product_image|linebreaks }}</label>
             </div>
-            <hr>
-            <div class="col-md-10 mb-1">
+            <hr style="margin-top: 0">
+            <div class="col-lg-11 mb-1">
                 <div>
                     <label class="small">Поиск:</label>
                 </div>
@@ -252,15 +242,15 @@
                 {% endfor %}
             </div>
             <hr>
-            <div class="col-md-10">
+            <div class="col-lg-11">
                 <label class="small">{{ card.created_on }}</label>
             </div>
             <hr>
-            <div class="col-md-10">
+            <div class="col-lg-11">
                 <label>Ⓒ <small>{{ card.user.first_name }} {{ card.user.last_name }}</small></label>
             </div>
             {% if card.user.profile.telegram_username or card.user.profile.vk_username %}
-            <div class="col-md-10 mb-1">
+            <div class="col-lg-11 mb-1">
                 {% if card.user.profile.telegram_username %}
                 <label class="small mb-1">TG: <a href="https://t.me/{{ card.user.profile.telegram_username }}"
                                                  target="_blank">@{{ card.user.profile.telegram_username }}</a></label>
