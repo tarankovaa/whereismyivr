@@ -1,0 +1,70 @@
+{% extends "authorization/base.html" %}
+{% block content %}
+<div class="row mb-3 col-5 col-md-2">
+    <img class="rounded-circle account-img" src="{{ user.profile.profile_pic.url }} "
+         style="cursor: pointer;"/>
+</div>
+<div class="form-content">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label class="small mb-1">Имя пользователя:</label>
+                    {{ user_form.username }}
+                    <div class="mb-2">
+                        <div>
+                            <label class="mt-2 mb-0"><small>Электронная почта:</small> {{ request.user.email }}</label>
+                        </div>
+                        <a href=""><small>Изменить адрес эл. почты</small></a><br>
+                    </div>
+                    <div class="mb-1">
+                        <label class="small mb-1">Имя:</label>
+                        {{ user_form.first_name }}
+                    </div>
+                    <div class="mb-1">
+                        <label class="small mb-1">Фамилия:</label>
+                        {{ user_form.last_name }}
+                    </div>
+                    <a href="{% url 'password_change' %}">Изменить пароль</a>
+                    <hr>
+                    <div class="mb-1">
+                        <label class="small mb-1">Тип пользователя:</label>
+                        {{ profile_form.profile_type }}
+                    </div>
+                    <div class="mb-1">
+                        <label class="small mb-1">Изменить изображение профиля:</label>
+                        {{ profile_form.profile_pic }}
+                    </div>
+                    <div class="mb-1">
+                        <label class="small mb-1">Изменить контакт Telegram:</label>
+                        {{ profile_form.telegram_username }}
+                    </div>
+                    <div>
+                        <label class="small mb-1">Изменить контакт VK:</label>
+                        {{ profile_form.vk_username }}
+                    </div>
+                    {% if user_form.errors %}
+                    {% for key, values in user_form.errors.items %}
+                    {% for value in values %}
+                    <label class="text-danger"><small><small>• {{ value }}</small></small></label>
+                    {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+                    {% if profile_form.errors %}
+                    {% for key, values in profile_form.errors.items %}
+                    {% for value in values %}
+                    <label class="text-danger"><small><small>• {{ value }}</small></small></label>
+                    {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="mt-2">
+            <button type="submit" class="btn btn-dark">Сохранить</button>
+            <button type="reset" class="btn btn-dark">Сбросить</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

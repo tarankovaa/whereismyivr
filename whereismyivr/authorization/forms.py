@@ -9,7 +9,6 @@ from .models import Profile
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(required=True,
-                             # validators=[validate_email],
                              widget=forms.EmailInput(attrs={
                                  'class': 'form-control',
                                  'placeholder': 'Введите электронную почту',
@@ -40,7 +39,7 @@ class SignupForm(UserCreationForm):
     def clean_email(self):
         data = self.cleaned_data['email']
         if User.objects.filter(email=data).exists():
-            raise forms.ValidationError("This email already used")
+            raise forms.ValidationError("Данный электронный адрес используется другим аккаунтом.")
         return data
 
 
@@ -64,15 +63,7 @@ class LoginForm(AuthenticationForm):
         fields = ['username', 'password', 'remember_me']
 
 
-class ProfileForm(ModelForm):
-    CUSTOMER = "CU"
-    CONSULTANT = "CO"
-    PERFORMER = "PE"
-    PROFILE_TYPE_CHOICES = [
-        (PERFORMER, "Исполнитель"),
-        (CUSTOMER, "Заказчик"),
-        (CONSULTANT, "Консультант"),
-    ]
+'''class UserForm(ModelForm):
     first_name = forms.CharField(max_length=50,
                                  required=True,
                                  widget=forms.TextInput(attrs={
@@ -87,8 +78,14 @@ class ProfileForm(ModelForm):
                                 }))
 
     class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+
+class ProfileForm(ModelForm):
+    class Meta:
         model = Profile
-        fields = ['first_name', 'last_name', 'profile_pic', 'profile_type', 'telegram_username', 'vk_username']
+        fields = ['profile_pic', 'profile_type', 'telegram_username', 'vk_username']
         widgets = {
             "profile_pic": forms.FileInput(attrs={
                 'class': 'form-control',
@@ -108,6 +105,52 @@ class ProfileForm(ModelForm):
         if not data:
             raise forms.ValidationError("This field cannot be empty")
         return data
+'''
+
+
+class UpdateUserForm(forms.ModelForm):
+    username = forms.CharField(max_length=32,
+                               required=True,
+                               widget=forms.TextInput(attrs={
+                                   'class': 'form-control',
+                               }))
+    first_name = forms.CharField(max_length=50,
+                                 required=True,
+                                 widget=forms.TextInput(attrs={
+                                     'class': 'form-control',
+                                 }))
+    last_name = forms.CharField(max_length=50,
+                                required=True,
+                                widget=forms.TextInput(attrs={
+                                    'class': 'form-control',
+                                }))
+
+    class Meta:
+        model = Profile
+        fields = ['username', 'first_name', 'last_name']
+
+
+class UpdateProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_pic', 'profile_type', 'telegram_username', 'vk_username']
+        widgets = {
+            "profile_pic": forms.FileInput(attrs={
+                'class': 'form-control',
+            }),
+            "telegram_username": forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите ваш ник в Telegram',
+            }),
+            "vk_username": forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Введите ваш ник в VK',
+            }),
+            "profile_type": forms.Select(attrs={
+                'class': 'form-control',
+                'required': True,
+            })
+        }
 
 
 '''class UserEmailForm(ModelForm):

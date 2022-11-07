@@ -1,16 +1,29 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-<ul class="list-group">
-    {% for card in cards %}
-    <li class="list-group-item">
-        <p class="h5">{{ card.title }}</p>
-        <p>{{ card.get_type_of_app }}</p>
-        <p>{{ card.get_search_for }}</p>
-        <p>{{ card.product_image }}</p>
-        <p>{{ card.created_on }}</p>
-        <p>{{ card.user }}</p>
-    </li>
-    {% endfor %}
-</ul>
+
+{% for card in cards %}
+<div class="col-lg-7">
+    <div class="card shadow-lg border-0 rounded-lg mt-0 mb-3">
+        <div class="card-header">
+            <h3 class="font-weight-light my-2">{{ card.title }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="col-md-10 mb-1">
+                <label class="mb-1">{{ card.get_type_of_app }}</label>
+            </div>
+            <div class="col-md-10 mb-1">
+                <label class=" mb-1">{{ card.get_search_for }}</label>
+            </div>
+            <div class="col-md-10 mb-1">
+                <label class=" mb-1">{{ card.product_image }}</label>
+            </div>
+            <div class="col-md-10 mb-1">
+                <label class="small mb-1">{{ card.created_on }}</label>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 {% endblock %}

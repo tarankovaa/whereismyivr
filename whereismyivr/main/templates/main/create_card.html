@@ -1,16 +1,80 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-<h1>Создание карточки</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.title }}<br>
-    {{ form.type_of_app }}<br>
-    {{ form.customer }}<br>
-    {{ form.consultant }}<br>
-    {{ form.performer }}<br>
-    {{ form.partner }}<br>
-    {{ form.product_image }}<br>
-    <button type="submit" class="btn btn-success">Подтвердить</button>
-</form>
+<div class="form-content">
+    <h3 class="font-weight-light my-1">Создание карточки</h3>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <div class="mb-1">
+                        <label class="small mb-1">Название:</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="mb-1">
+                        <label class="small mb-1">Проект или исследование:</label>
+                        {{ form.type_of_card }}
+                    </div>
+                    <div class="mb-1">
+                        <label class="small mb-1">Область:</label>
+                        {{ form.field_of_card }}
+                    </div>
+                    <div class="mb-1">
+                        <label class="small">Поиск:</label>
+                        {% if request.user.profile.profile_type == "PE" %}
+                        <div class="mb-1">
+                            {{ form.customer }}
+                            <label>Заказчик</label>
+                        </div>
+                        {% endif %}
+                        {% if request.user.profile.profile_type == "PE" %}
+                        <div class="mb-1">
+                            {{ form.consultant }}
+                            <label>Консультант</label>
+                        </div>
+                        {% endif %}
+                        {% if request.user.profile.profile_type == "CU" %}
+                        <div class="mb-1">
+                            {{ form.performer }}
+                            <label>Исполнитель</label>
+                        </div>
+                        {% endif %}
+                        {% if request.user.profile.profile_type == "PE" %}
+                        <div class="mb-1">
+                            {{ form.partner }}
+                            <label>Напарник</label>
+                        </div>
+                        {% endif %}
+                        <div class="mb-1">
+                            <label class="small mb-1">Образ продукта:</label>
+                            {{ form.product_image }}
+                        </div>
+                    </div>
+                    {% if user_form.errors %}
+                    {% for key, values in user_form.errors.items %}
+                    {% for value in values %}
+                    <label class="text-danger"><small><small>• {{ value }}</small></small></label>
+                    {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+                    {% if profile_form.errors %}
+                    {% for key, values in profile_form.errors.items %}
+                    {% for value in values %}
+                    <label class="text-danger"><small><small>• {{ value }}</small></small></label>
+                    {% endfor %}
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if form.errors %}
+        <div class="mt-2">
+            {% else %}
+        <div class="mt-3">
+            {% endif %}
+            <button type="submit" class="btn btn-dark">Сохранить</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

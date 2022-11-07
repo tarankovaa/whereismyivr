@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.views import View
 from .models import Card
@@ -31,7 +32,13 @@ class CreateCardView(View):
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('login')
+            return redirect('/login/?next=/create-card/')
         if not request.user.profile.is_filled:
+            messages.error(request, """Создание заявки возможно только с заполненным профилем.
+            Заполните его во вкладке профиль""")
+            return redirect('home')
+        if request.user.profile.profile_type == "CO":
+            messages.error(request, """Ваш тип пользователя не позволяет создать карточку. 
+            Вы можете поменять его в настройках профиля""")
             return redirect('home')
         return super(CreateCardView, self).dispatch(request, *args, **kwargs)

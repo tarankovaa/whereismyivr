@@ -1,3 +1,4 @@
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 from .validators import alphanumeric_underscore
@@ -14,14 +15,17 @@ class Profile(models.Model):
         (CUSTOMER, "Заказчик"),
         (CONSULTANT, "Консультант"),
     ]
-    first_name = User.first_name
-    last_name = User.last_name
 
-    profile_pic = models.ImageField("Фото профиля", blank=True)
+    profile_pic = models.ImageField(
+        "Фото профиля",
+        default='default.jpg',
+        upload_to='profile_images')
+
     profile_type = models.CharField(
         "Тип профиля",
         max_length=2,
-        blank=True,
+        blank=False,
+        default=PERFORMER,
         choices=PROFILE_TYPE_CHOICES)
 
     telegram_username = models.CharField(
@@ -29,6 +33,7 @@ class Profile(models.Model):
         max_length=32,
         blank=True,
         validators=[alphanumeric_underscore])
+
     vk_username = models.CharField(
         "Имя пользователя в VK",
         max_length=32,
@@ -43,6 +48,16 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def save(self, *args, **kwargs):
+        super().save()
+
+        img = Image.open(self.profile_pic.path)
+
+        if img.height > 100 or img.width > 100:
+            new_img = (100, 100)
+            img.thumbnail(new_img)
+            img.save(self.profile_pic.path)
 
     '''def get_email(self):
         return self.user.email

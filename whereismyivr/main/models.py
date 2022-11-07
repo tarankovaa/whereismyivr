@@ -6,23 +6,57 @@ from django.contrib.auth.models import User
 class Card(models.Model):
     RESEARCH = "RE"
     PROJECT = "PR"
-    TYPE_OF_APP_CHOICES = [
+    TYPE_OF_APP_CHOICES = (
         (RESEARCH, "Исследование"),
         (PROJECT, "Проект"),
-    ]
+    )
+    TYPE_OF_FIELD_CHOICES = (
+        ("it", "IT"),
+        ("business", "Бизнес"),
+        ("design", "Дизайн"),
+        ("publishing", "Издательское дело"),
+        ("engineering", "Инженерия"),
+        ("media", "Медиа"),
+        ("education", "Образование"),
+        ("events", "Организация событий"),
+        ("oriental_studies", "Востоковедение"),
+        ("natural_sciences", "Естественные науки"),
+        ("art", "Искусствоведение"),
+        ("history", "История"),
+        ("culturology", "Культурология"),
+        ("marketing", "Маркетинг"),
+        ("maths", "Математика"),
+        ("management", "Менеджмент"),
+        ("linguistics", "Лингвистика"),
+        ("politics", "Политология"),
+        ("right", "Право"),
+        ("psychology", "Психология"),
+        ("sociology", "Социология"),
+        ("philology", "Филология"),
+        ("philosophy", "Философия"),
+        ("economy", "Экономика"),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     title = models.TextField("Название", blank=False)
-    type_of_app = models.CharField(
-        "Тип приложения",
+    type_of_card = models.CharField(
+        "Исследование или проект",
         max_length=2,
         choices=TYPE_OF_APP_CHOICES,
         blank=False
     )
+    field_of_card = models.CharField(
+        "Область",
+        max_length=20,
+        choices=TYPE_OF_FIELD_CHOICES,
+        blank=False
+    )
+
     customer = models.BooleanField("Заказчик", default=False)
     consultant = models.BooleanField("Консультант", default=False)
     performer = models.BooleanField("Исполнитель", default=False)
     partner = models.BooleanField("Напарник", default=False)
+
     product_image = models.TextField("Образ продукта", blank=False)
     created_on = models.DateTimeField("Дата создания", default=now)
 
@@ -34,7 +68,7 @@ class Card(models.Model):
         return self.title
 
     def get_type_of_app(self):
-        if self.type_of_app == self.RESEARCH:
+        if self.type_of_card == self.RESEARCH:
             return "Исследование"
         return "Проект"
 

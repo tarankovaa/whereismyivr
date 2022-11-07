@@ -1,13 +1,80 @@
 {% extends "authorization/base.html" %}
 
 {% block content %}
-<h1>Регистрация</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.username }}<br>
-    {{ form.email }}<br>
-    {{ form.password1 }}<br>
-    {{ form.password2 }}<br>
-    <button type="submit" class="btn btn-success">Зарегистрироваться</button>
-</form>
-{% endblock %}
+<div class="form-content my-3 p-3">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="card shadow-lg border-0 rounded-lg mt-0 mb-3">
+                    <div class="card-header justify-content-center">
+                        <h3 class="font-weight-light my-1 text-center">Регистрация</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="col-md-10 offset-md-1">
+                                    <div class="form-group mb-1">
+                                        <label class="small mb-1">Имя пользователя</label>
+                                        {{ form.username }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-10 offset-md-1">
+                                    <div class="form-group mb-1">
+                                        <label class="small mb-1">Электронная почта</label>
+                                        {{ form.email }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-10 offset-md-1">
+                                    <div class="form-group mb-1">
+                                        <label class="small mb-1">Пароль</label>
+                                        {{ form.password1 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-10 offset-md-1">
+                                    <div class="form-group mb-1">
+                                        <label class="small mb-1">Пароль ещё раз</label>
+                                        {{ form.password2 }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% if form.errors %}
+                            <div class="col-md-10 offset-md-1">
+                                {% for key, values in form.errors.items %}
+                                {% for value in values %}
+                                <label class="text-danger"><small><small>• {{ value }}</small></small></label>
+                                {% endfor %}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="form-row">
+                                <div class="col-md-10 offset-md-1">
+                                    {% if form.errors %}
+                                    <div class="form-group mt-2 mb-0">
+                                    {% else %}
+                                    <div class="form-group mt-3 mb-0">
+                                    {% endif %}
+                                            <button type="submit" class="col-md-12 btn btn-dark">Создать аккаунт
+                                            </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <div class="small">
+                            <a href="{% url 'login' %}">Уже есть аккаунт? Войти</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

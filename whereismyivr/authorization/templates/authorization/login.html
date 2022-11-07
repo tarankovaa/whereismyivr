@@ -1,14 +1,68 @@
 {% extends "authorization/base.html" %}
 
 {% block content %}
-<h1>Вход</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.username }}<br>
-    {{ form.password }}<br>
-    <label>{{ form.remember_me }}
-        Запомнить меня</label><br><br>
-    <button type="submit" class="btn btn-success">Войти</button><br><br>
-    <a href="{% url 'password_reset' %}"><i>Forgot Password?</i></a>
-</form>
-{% endblock %}
+<div class="form-content my-3 p-3">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5">
+                <div class="card shadow-lg border-0 rounded-lg mt-0 mb-3">
+                    <div class="card-header justify-content-center">
+                        <h3 class="font-weight-light my-1 text-center">Вход</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="col-md-10 offset-md-1">
+                                    <div class="form-group mb-1">
+                                        <label class="small mb-1">Имя пользователя</label>
+                                        {{ form.username }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-10 offset-md-1">
+                                    <div class="form-group">
+                                        <label class="small mb-1">Пароль</label>
+                                        {{ form.password }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-10 offset-md-1">
+                                    <div class="form-group mt-2 mb-1">
+                                        {{ form.remember_me }}
+                                        <label> Запомнить меня</label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if form.errors %}
+                            <div class="col-md-10 offset-md-1">
+                                {% for key, values in form.errors.items %}
+                                {% for value in values %}
+                                <label class="text-danger"><small><small>• {{ value }}</small></small></label>
+                                {% endfor %}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="form-row">
+                                <div class="col-md-10 offset-md-1">
+                                    <div class="form-group mt-2 mb-1">
+                                        <button name="login" class="col-md-12 btn btn-dark" id="login">Войти</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center">
+                        <div class="small">
+                            <a href="{% url 'signup' %}">Еще нет аккаунта? Создать</a><br>
+                            <a href="{% url 'password_reset' %}"><i>Забыли пароль?</i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
