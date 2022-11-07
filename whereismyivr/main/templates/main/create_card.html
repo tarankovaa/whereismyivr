@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="form-content">
-    <h3 class="font-weight-light my-1">Создание карточки</h3>
+    <h3 class="font-weight-light my-4">Создание карточки</h3>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-row">
@@ -22,25 +22,25 @@
                     </div>
                     <div class="mb-1">
                         <label class="small">Поиск:</label>
-                        {% if request.user.profile.profile_type == "PE" %}
+                        {% if request.user.profile.is_performer %}
                         <div class="mb-1">
                             {{ form.customer }}
                             <label>Заказчик</label>
                         </div>
                         {% endif %}
-                        {% if request.user.profile.profile_type == "PE" %}
+                        {% if request.user.profile.is_performer %}
                         <div class="mb-1">
                             {{ form.consultant }}
                             <label>Консультант</label>
                         </div>
                         {% endif %}
-                        {% if request.user.profile.profile_type == "CU" %}
+                        {% if request.user.profile.is_customer %}
                         <div class="mb-1">
                             {{ form.performer }}
                             <label>Исполнитель</label>
                         </div>
                         {% endif %}
-                        {% if request.user.profile.profile_type == "PE" %}
+                        {% if request.user.profile.is_performer %}
                         <div class="mb-1">
                             {{ form.partner }}
                             <label>Напарник</label>

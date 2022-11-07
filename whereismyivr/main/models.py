@@ -1,4 +1,4 @@
-from django.utils.timezone import now
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -58,7 +58,7 @@ class Card(models.Model):
     partner = models.BooleanField("Напарник", default=False)
 
     product_image = models.TextField("Образ продукта", blank=False)
-    created_on = models.DateTimeField("Дата создания", default=now)
+    created_on = models.DateTimeField("Дата создания", default=datetime.now)
 
     class Meta:
         verbose_name = "Карточка"
@@ -67,20 +67,24 @@ class Card(models.Model):
     def __str__(self):
         return self.title
 
-    def get_type_of_app(self):
+    def get_type_of_card(self):
         if self.type_of_card == self.RESEARCH:
             return "Исследование"
         return "Проект"
 
+    def get_field_of_card(self):
+        for field in self.TYPE_OF_FIELD_CHOICES:
+            if field[0] == self.field_of_card:
+                return field[1]
+
     def get_search_for(self):
         search_for = []
         if self.customer:
-            search_for.append("заказчик")
+            search_for.append("Заказчик")
         if self.consultant:
-            search_for.append("консультант")
+            search_for.append("Консультант")
         if self.performer:
-            search_for.append("исполнитель")
+            search_for.append("Исполнитель")
         if self.partner:
-            search_for.append("напарник")
-        search_for[0] = search_for[0].capitalize()
-        return "; ".join(search_for)
+            search_for.append("Напарник")
+        return search_for

@@ -10,6 +10,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import login_required
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
+from django.utils.safestring import mark_safe
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import EmailMessage
@@ -72,12 +73,13 @@ def activate(request, uidb64, token):
     if user and not user.is_active and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        messages.success(request, 'Спасибо за подтверждение электронной почты. Теперь вы можете войти в аккаунт')
+        messages.success(request, mark_safe(
+            'Спасибо за подтверждение электронной почты. Теперь вы можете войти в аккаунт'))
         return redirect('login')
     elif user and user.is_active:
         return redirect('home')
     else:
-        messages.error(request, 'Activation link is invalid!')
+        messages.error(request, 'Ссылка активации некорректна!')
     return redirect('home')
 
 
@@ -90,33 +92,6 @@ class CustomLoginView(LoginView):
             self.request.session.set_expiry(0)
             self.request.session.modified = True
         return super(CustomLoginView, self).form_valid(form)
-
-
-'''class CreateProfileView(View):
-    user_form_class = UserForm
-    profile_form_class = ProfileForm
-    template_name = 'authorization/create_profile.html'
-
-    def get(self, request, *args, **kwargs):
-        user_form = self.user_form_class()
-        profile_form = self.profile_form_class()
-        return render(request, self.template_name, {'user_form': user_form,
-                                                    'profile_form': profile_form})
-
-    def post(self, request, *args, **kwargs):
-        user_form = UserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            return redirect('home')
-        return render(request, self.template_name, {'user_form': user_form,
-                                                    'profile_form': profile_form})
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated or request.user.profile.is_filled:
-            return redirect('home')
-        return super(CreateProfileView, self).dispatch(request, *args, **kwargs)'''
 
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
@@ -151,48 +126,3 @@ def profile(request):
         profile_form = UpdateProfileForm(instance=request.user.profile)
 
     return render(request, 'authorization/profile.html', {'user_form': user_form, 'profile_form': profile_form})
-
-
-'''def signup(request):
-    if request.method == "POST":
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}')
-            return redirect('login')
-    form = SignupForm()
-    return render(request, 'authorization/signup.html', {'form': form})'''
-
-'''def sign_up_password(request, user):
-    if not user.email:
-        return redirect("signup")
-    if request.method == "POST":
-        form = UserPasswordForm(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data['password'])
-            user.password = form.cleaned_data['password']
-            return redirect('signup_username', user=user)
-    form = UserPasswordForm()
-    context = {
-        'field': form['password'],
-    }
-    return render(request, 'authorization/signup.html', context)
-
-
-def sign_up_username(request, user):
-    if not user.password:
-        return redirect("signup")
-    if request.method == "POST":
-        form = UsernameForm(request.POST)
-        if form.is_valid():
-            user.username = form.cleaned_data['username']
-            return redirect('login')
-    form = UsernameForm()
-    context = {
-        'field': form['username'],
-    }
-    return render(request, 'authorization/signup.html', context)'''
-
-'''def log_in(request):
-    return render(request, 'authorization/login.html')'''

@@ -22,16 +22,14 @@
             </nav>
             {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-dismissible fade show mt-4 mx-10" role="alert" style="background-color: #f0f5f5">
+            <div class="alert alert-dismissible fade show my-4 mx-10" role="alert" style="background-color: #f0f5f5">
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endfor %}
             {% endif %}
-            <div class="container my-4">
-                {% block content %}
-                {% endblock %}
-            </div>
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
 </div>

@@ -1,16 +1,69 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.utils.safestring import mark_safe
 from django.views import View
 from .models import Card
 from .forms import CreateCardForm
 
 
 def index(request):
-    all_cards = Card.objects.all()
-    context = {
-        'cards': all_cards,
-    }
-    return render(request, 'main/index.html', context)
+    if not request.user.is_authenticated:
+        messages.error(request, mark_safe('<a href="/login">Войдите</a>, чтобы просматривать заявки'))
+        cards = []
+        # form = None
+    else:
+        # form = FilterForm(request.post)
+        # if form.it.
+        cards = Card.objects.order_by('-created_on')
+    return render(request, 'main/index.html', {'cards': cards,
+                                               'search': None})
+
+
+def search(request, param):
+    if not request.user.is_authenticated:
+        messages.error(request, mark_safe('<a href="/login">Войдите</a>, чтобы просматривать заявки'))
+        cards = []
+    else:
+        if param == "customer":
+            cards = Card.objects.order_by('-created_on').filter(customer=True)
+        elif param == "consultant":
+            cards = Card.objects.order_by('-created_on').filter(consultant=True)
+        elif param == "performer":
+            cards = Card.objects.order_by('-created_on').filter(performer=True)
+        elif param == "partner":
+            cards = Card.objects.order_by('-created_on').filter(partner=True)
+    return render(request, 'main/index.html', {'cards': cards,
+                                               'search': param})
+
+
+'''def consultant(request):
+    if not request.user.is_authenticated:
+        messages.error(request, mark_safe('<a href="/login">Войдите</a>, чтобы просматривать заявки'))
+        cards = []
+    else:
+        cards = Card.objects.order_by('-created_on').filter(consultant=True)
+    return render(request, 'main/index.html', {'cards': cards,
+                                               'search': 'consultant'})
+
+
+def performer(request):
+    if not request.user.is_authenticated:
+        messages.error(request, mark_safe('<a href="/login">Войдите</a>, чтобы просматривать заявки'))
+        cards = []
+    else:
+        cards = Card.objects.order_by('-created_on').filter(performer=True)
+    return render(request, 'main/index.html', {'cards': cards,
+                                               'search': 'performer'})
+
+
+def partner(request):
+    if not request.user.is_authenticated:
+        messages.error(request, mark_safe('<a href="/login">Войдите</a>, чтобы просматривать заявки'))
+        cards = []
+    else:
+        cards = Card.objects.order_by('-created_on').filter(partner=True)
+    return render(request, 'main/index.html', {'cards': cards,
+                                               'search': 'partner'})'''
 
 
 class CreateCardView(View):
@@ -34,11 +87,11 @@ class CreateCardView(View):
         if not request.user.is_authenticated:
             return redirect('/login/?next=/create-card/')
         if not request.user.profile.is_filled:
-            messages.error(request, """Создание заявки возможно только с заполненным профилем.
-            Заполните его во вкладке профиль""")
+            messages.error(request, mark_safe("""Создание заявки возможно только с заполненным профилем.
+            Заполните его во вкладке <a href="/profile">профиль</a>"""))
             return redirect('home')
         if request.user.profile.profile_type == "CO":
             messages.error(request, """Ваш тип пользователя не позволяет создать карточку. 
-            Вы можете поменять его в настройках профиля""")
+            Вы можете поменять его в настройках <a href="/profile">профиля</a>""")
             return redirect('home')
         return super(CreateCardView, self).dispatch(request, *args, **kwargs)
