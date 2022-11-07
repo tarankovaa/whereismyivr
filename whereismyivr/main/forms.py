@@ -9,16 +9,12 @@ class CreateCardForm(ModelForm):
     class Meta:
         # настройка формы (связанная с ней модель, отображаемые поля и настройка отображения полей в интерфейсе)
         model = Card
-        fields = ['title', 'type_of_card', 'field_of_card', 'customer', 'consultant', 'performer', 'partner',
+        fields = ['title', 'field_of_card', 'customer', 'consultant', 'performer', 'partner',
                   'product_image']
         widgets = {
             "title": forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Введите название',
-                'required': True,
-            }),
-            "type_of_card": forms.Select(attrs={
-                'class': 'form-control',
                 'required': True,
             }),
             "product_image": forms.Textarea(attrs={

@@ -7,45 +7,39 @@ class Card(models.Model):
     # модель заявки
     RESEARCH = "RE"
     PROJECT = "PR"
-    TYPE_OF_APP_CHOICES = (
-        (RESEARCH, "Исследование"),
-        (PROJECT, "Проект"),
-    )
     TYPE_OF_FIELD_CHOICES = (
-        ("it", "IT"),
-        ("business", "Бизнес"),
-        ("design", "Дизайн"),
-        ("publishing", "Издательское дело"),
-        ("engineering", "Инженерия"),
-        ("media", "Медиа"),
-        ("education", "Образование"),
-        ("events", "Организация событий"),
-        ("oriental_studies", "Востоковедение"),
-        ("natural_sciences", "Естественные науки"),
-        ("art", "Искусствоведение"),
-        ("history", "История"),
-        ("culturology", "Культурология"),
-        ("marketing", "Маркетинг"),
-        ("maths", "Математика"),
-        ("management", "Менеджмент"),
-        ("linguistics", "Лингвистика"),
-        ("politics", "Политология"),
-        ("right", "Право"),
-        ("psychology", "Психология"),
-        ("sociology", "Социология"),
-        ("philology", "Филология"),
-        ("philosophy", "Философия"),
-        ("economy", "Экономика"),
+        ("it_project", "IT — проект"),
+        ("business_project", "Бизнес — проект"),
+        ("design", "Дизайн — проект"),
+        ("publishing", "Издательское дело — проект"),
+        ("engineering", "Инженерия — проект"),
+        ("media", "Медиа — проект"),
+        ("education_project", "Образование — проект"),
+        ("events", "Организация событий — проект"),
+        ("it_research", "IT — исследование"),
+        ("business_research", "Бизнес — исследование"),
+        ("oriental_studies", "Востоковедение — исследование"),
+        ("natural_sciences", "Естественные науки — исследование"),
+        ("art", "Искусствоведение — исследование"),
+        ("history", "История — исследование"),
+        ("culturology", "Культурология — исследование"),
+        ("marketing", "Маркетинг — исследование"),
+        ("maths", "Математика — исследование"),
+        ("management", "Менеджмент — исследование"),
+        ("linguistics", "Лингвистика — исследование"),
+        ("education_research", "Образование — исследование"),
+        ("politics", "Политология — исследование"),
+        ("right", "Право — исследование"),
+        ("psychology", "Психология — исследование"),
+        ("sociology", "Социология — исследование"),
+        ("philology", "Филология — исследование"),
+        ("philosophy", "Философия — исследование"),
+        ("economy", "Экономика — исследование"),
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     title = models.TextField("Название", blank=False)
-    type_of_card = models.CharField(
-        "Исследование или проект",
-        max_length=2,
-        choices=TYPE_OF_APP_CHOICES,
-        blank=False
-    )
+
     field_of_card = models.CharField(
         "Область",
         max_length=20,
@@ -72,15 +66,15 @@ class Card(models.Model):
 
     def get_type_of_card(self):
         # возвращает тип заявки - проект или исследование
-        if self.type_of_card == self.RESEARCH:
-            return "Исследование"
-        return "Проект"
+        for field in self.TYPE_OF_FIELD_CHOICES:
+            if field[0] == self.field_of_card:
+                return field[1].split(" — ")[1].capitalize()
 
     def get_field_of_card(self):
         # возвращает область проекта или исследования
         for field in self.TYPE_OF_FIELD_CHOICES:
             if field[0] == self.field_of_card:
-                return field[1]
+                return field[1].split(" — ")[0]
 
     def get_search_for(self):
         # возвращает разыскиваемые должности
