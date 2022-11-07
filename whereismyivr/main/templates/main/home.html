@@ -195,6 +195,7 @@
 </form>
 {% endif %}
 {% if request.user.is_authenticated and not cards %}
+<label class="mb-3">Найдено заявок: {{ cards|length }}</label>
 <div class="col-lg-5 mt">
     <div class="card shadow-lg border-0 rounded-lg mt-0 mb-3">
         <div class="alert">
@@ -203,6 +204,7 @@
     </div>
 </div>
 {% else %}
+<label class="mb-3">Найдено заявок: {{ cards|length }}</label>
 {% for card in cards %}
 <div class="col-lg-7">
     <div class="card shadow-lg border-0 rounded-lg mt-2 mb-4">

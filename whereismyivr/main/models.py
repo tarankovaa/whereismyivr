@@ -13,8 +13,8 @@ def get_keys_type_of_field_choices(choices):
 
 class Card(models.Model):
     # модель заявки
-    RESEARCH = "RE"
-    PROJECT = "PR"
+    RESEARCH = "Исследование"
+    PROJECT = "Проект"
     TYPE_OF_FIELD_CHOICES = (
         ("it_project", "IT — проект"),
         ("business_project", "Бизнес — проект"),

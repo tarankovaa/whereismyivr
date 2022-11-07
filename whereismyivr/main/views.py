@@ -63,9 +63,13 @@ def search(request, param):
 def get_cards(form, all_cards):
     # получить заявки, соответствующие фильтрации
     cards = all_cards[:0]
+    count = 0
     for value in Card.KEYS_TYPE_OF_FIELD_CHOICES:
         if value in form.data:
+            count += 1
             cards = cards.union(all_cards.filter(field_of_card=value))
+    if not count:
+        return all_cards
     return cards
 
 
@@ -84,6 +88,19 @@ class CreateCardView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             card = form.save(commit=False)
+            if not (card.customer or card.partner or card.consultant or card.performer):
+                errors = ["Выберите, кого вы ищете"]
+                return render(request, self.template_name, {'form': form,
+                                                            'errors': errors})
+
+            if request.user.profile.is_performer() and card.get_type_of_card() == card.RESEARCH and (
+                    card.customer or card.partner):
+                messages.error(request, "Поиск заказчика и/или напарника недоступен для заявок типа исследование")
+                return render(request, self.template_name, {'form': form})
+
+            if request.user.profile.is_customer() and card.get_type_of_card() == card.RESEARCH:
+                messages.error(request, "Поиск исполнителя доступен только для работ типа проект")
+                return render(request, self.template_name, {'form': form})
             card.user = request.user
             card.save()
             return redirect('home')
