@@ -51,13 +51,14 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         super().save()
+        img = Image.open(self.profile_pic)
 
-        img = Image.open(self.profile_pic.path)
+        img = img.crop(((img.width - min(img.size)) // 2,
+                        (img.height - min(img.size)) // 2,
+                        (img.width + min(img.size)) // 2,
+                        (img.height + min(img.size)) // 2))
 
-        if img.height > 100 or img.width > 100:
-            new_img = (100, 100)
-            img.thumbnail(new_img)
-            img.save(self.profile_pic.path)
+        img.save(self.profile_pic.path)
 
     def is_customer(self):
         return self.profile_type == self.CUSTOMER

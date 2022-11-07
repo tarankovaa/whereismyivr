@@ -1,0 +1,279 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-md my-3">
+    {% if search == 'customer' %}
+    <div class="navbar-nav ml-auto">
+        <a href="{% url 'home' %}" class="nav-item nav-link">Все</a>
+        <a href="/search/customer" class="nav-item nav-link" style="color: #106dff;">Поиск заказчика</a>
+        <a href="/search/consultant" class="nav-item nav-link">Поиск консультанта</a>
+        <a href="/search/performer" class="nav-item nav-link">Поиск исполнителя</a>
+        <a href="/search/partner" class="nav-item nav-link">Поиск напарника</a>
+    </div>
+    {% elif search == 'consultant' %}
+    <div class="navbar-nav ml-auto">
+        <a href="{% url 'home' %}" class="nav-item nav-link">Все</a>
+        <a href="/search/customer" class="nav-item nav-link">Поиск заказчика</a>
+        <a href="/search/consultant" class="nav-item nav-link" style="color: #106dff;">Поиск консультанта</a>
+        <a href="/search/performer" class="nav-item nav-link">Поиск исполнителя</a>
+        <a href="/search/partner" class="nav-item nav-link">Поиск напарника</a>
+    </div>
+    {% elif search == 'performer' %}
+    <div class="navbar-nav ml-auto">
+        <a href="{% url 'home' %}" class="nav-item nav-link">Все</a>
+        <a href="/search/customer" class="nav-item nav-link">Поиск заказчика</a>
+        <a href="/search/consultant" class="nav-item nav-link">Поиск консультанта</a>
+        <a href="/search/performer" class="nav-item nav-link" style="color: #106dff;">Поиск исполнителя</a>
+        <a href="/search/partner" class="nav-item nav-link">Поиск напарника</a>
+    </div>
+    {% elif search == 'partner' %}
+    <div class="navbar-nav ml-auto">
+        <a href="{% url 'home' %}" class="nav-item nav-link">Все</a>
+        <a href="/search/customer" class="nav-item nav-link">Поиск заказчика</a>
+        <a href="/search/consultant" class="nav-item nav-link">Поиск консультанта</a>
+        <a href="/search/performer" class="nav-item nav-link">Поиск исполнителя</a>
+        <a href="/search/partner" class="nav-item nav-link" style="color: #106dff;">Поиск напарника</a>
+    </div>
+    {% else %}
+    <div class="navbar-nav ml-auto">
+        <a href="{% url 'home' %}" class="nav-item nav-link" style="color: #106dff;">Все</a>
+        <a href="/search/customer" class="nav-item nav-link">Поиск заказчика</a>
+        <a href="/search/consultant" class="nav-item nav-link">Поиск консультанта</a>
+        <a href="/search/performer" class="nav-item nav-link">Поиск исполнителя</a>
+        <a href="/search/partner" class="nav-item nav-link">Поиск напарника</a>
+    </div>
+    {% endif %}
+</nav>
+{% if request.user.is_authenticated %}
+<form method="POST" class="mb-4">
+    {% csrf_token %}
+    <div class="row justify-content-start mb-2">
+        <div class="col-md-3">
+            <h5>
+                Проекты
+            </h5>
+            <div class="form-row">
+                <div class="form-group mt-0 mb-0">
+                    {{ form.it_project }} IT
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group mt-0 mb-0">
+                    {{ form.business_project }} Бизнес
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group mt-0 mb-0">
+                    {{ form.design }} Дизайн
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group mt-0 mb-0">
+                    {{ form.publishing }} Издательское дело
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group mt-0 mb-0">
+                    {{ form.engineering }} Инженерия
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group mt-0 mb-0">
+                    {{ form.media }} Медиа
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group mt-0 mb-0">
+                    {{ form.education_project }} Образование
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group mt-0 mb-0">
+                    {{ form.events }} Организация событий
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <h5 class="justify-content-center">
+                Исследования
+            </h5>
+            <div class="row justify-content-start">
+                <div class="col-md-3">
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.it_research }} IT
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.business_research }} Бизнес
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.oriental_studies }} Востоковедение
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.natural_sciences }} Естественные науки
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.art }} Искусствоведение
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.history }} История
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.culturology }} Культурология
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.marketing }} Маркетинг
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.maths }} Математика
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.management }} Менеджмент
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.linguistics }} Лингвистика
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.education_research }} Образование
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.politics }} Политология
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.right }} Право
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.psychology }} Психология
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.sociology }} Социология
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.philology }} Филология
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.philosophy }} Философия
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group mt-0 mb-0">
+                            {{ form.economy }} Экономика
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-dark">Применить</button>
+</form>
+{% endif %}
+{% if request.user.is_authenticated and not cards %}
+<div class="col-lg-5 mt">
+    <div class="card shadow-lg border-0 rounded-lg mt-0 mb-3">
+        <div class="alert">
+            Здесь пока ничего нет
+        </div>
+    </div>
+</div>
+{% else %}
+{% for card in cards %}
+<div class="col-lg-7">
+    <div class="card shadow-lg border-0 rounded-lg mt-2 mb-4">
+        <div class="card-header">
+            <h3 class="font-weight-light my-2">{{ card.title }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="col-md-10 mb-1">
+                <div>
+                    <label class="small">Тип заявки:</label>
+                </div>
+                <label class="mb-1">{{ card.get_type_of_card }}</label>
+            </div>
+            <hr>
+            <div class="col-md-10 mb-1">
+                <div>
+                    <label class="small">Область:</label>
+                </div>
+                <label class="mb-1">{{ card.get_field_of_card }}</label>
+            </div>
+            <hr>
+            <div class="col-md-10 mb-1">
+                <div>
+                    <label class="small text-break">Образ продукта:</label>
+                </div>
+                <label class="mb-1">{{ card.product_image }}</label>
+            </div>
+            <hr>
+            <div class="col-md-10 mb-1">
+                <div>
+                    <label class="small">Поиск:</label>
+                </div>
+                {% for item in card.get_search_for %}
+                <div>
+                    <label>{{ item }}</label>
+                </div>
+                {% endfor %}
+            </div>
+            <hr>
+            <div class="col-md-10">
+                <label class="small">{{ card.created_on }}</label>
+            </div>
+            <hr>
+            <div class="col-md-10">
+                <label>Ⓒ <small>{{ card.user.first_name }} {{ card.user.last_name }}</small></label>
+            </div>
+            {% if card.user.profile.telegram_username or card.user.profile.vk_username %}
+            <div class="col-md-10 mb-1">
+                {% if card.user.profile.telegram_username %}
+                <label class="small mb-1">TG: <a href="https://t.me/{{ card.user.profile.telegram_username }}"
+                                                 target="_blank">@{{ card.user.profile.telegram_username }}</a></label>
+                {% endif %}
+                {% if card.user.profile.vk_username %}
+                <label class="small mb-1">VK: <a href="https://vk.me/{{ card.user.profile.vk_username }}"
+                                                 target="_blank">@{{ card.user.profile.vk_username }}</a></label>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

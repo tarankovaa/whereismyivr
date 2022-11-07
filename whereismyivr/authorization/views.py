@@ -1,5 +1,3 @@
-import secrets
-
 from django.views import View
 from django.shortcuts import redirect, render
 from django.contrib import messages
@@ -14,10 +12,7 @@ from django.utils.safestring import mark_safe
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.mail import EmailMessage
-# from .forms import UserEmailForm, UsernameForm, UserPasswordForm
 from .forms import LoginForm, SignupForm, UpdateUserForm, UpdateProfileForm
-from django.core.exceptions import ObjectDoesNotExist
-from .models import Profile
 from .tokens import account_activation_token
 
 
