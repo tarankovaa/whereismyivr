@@ -1,10 +1,13 @@
 from django import forms
-from django.forms import ModelForm, Form
+from django.forms import Form, ModelForm
+
 from .models import Card
 
 
 class CreateCardForm(ModelForm):
+    # форма для создания заявки
     class Meta:
+        # настройка формы (связанная с ней модель, отображаемые поля и настройка отображения полей в интерфейсе)
         model = Card
         fields = ['title', 'type_of_card', 'field_of_card', 'customer', 'consultant', 'performer', 'partner',
                   'product_image']
@@ -32,6 +35,7 @@ class CreateCardForm(ModelForm):
 
 
 class FilterForm(Form):
+    # форма для фильтрации заявок
     it_project = forms.BooleanField(required=False)
     business_project = forms.BooleanField(required=False)
     design = forms.BooleanField(required=False)

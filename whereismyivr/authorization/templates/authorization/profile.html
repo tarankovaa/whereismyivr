@@ -19,7 +19,7 @@
                                 <label class="mt-2 mb-0"><small>Электронная почта:</small> {{ request.user.email }}
                                 </label>
                             </div>
-                            <a href=""><small>Изменить адрес эл. почты</small></a><br>
+                            <a href="{% url 'email_change' %}"><small>Изменить адрес эл. почты</small></a><br>
                         </div>
                         <div class="mb-1">
                             <label class="small mb-1">Имя:</label>

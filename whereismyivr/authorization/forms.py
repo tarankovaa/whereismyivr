@@ -1,10 +1,12 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
+
 from .models import Profile
 
 
 class SignupForm(UserCreationForm):
+    # форма для регистрации
     email = forms.EmailField(required=True,
                              widget=forms.EmailInput(attrs={
                                  'class': 'form-control',
@@ -30,10 +32,12 @@ class SignupForm(UserCreationForm):
                                 }))
 
     class Meta:
+        # настройка формы (связанная с ней модель и отображаемые поля)
         model = User
         fields = ("email", "username", "password1", "password2")
 
     def clean_email(self):
+        # проверка введенного пользователем email на существование в базе данных
         data = self.cleaned_data['email']
         if User.objects.filter(email=data).exists():
             raise forms.ValidationError("Данный электронный адрес используется другим аккаунтом.")
@@ -41,6 +45,7 @@ class SignupForm(UserCreationForm):
 
 
 class LoginForm(AuthenticationForm):
+    # форма для входа пользователя в аккаунт
     username = forms.CharField(max_length=32,
                                required=True,
                                widget=forms.TextInput(attrs={
@@ -56,11 +61,13 @@ class LoginForm(AuthenticationForm):
     remember_me = forms.BooleanField(required=False)
 
     class Meta:
+        # настройка формы (связанная с ней модель и отображаемые поля)
         model = User
         fields = ['username', 'password', 'remember_me']
 
 
 class UpdateUserForm(forms.ModelForm):
+    # форма для обновления полей пользователя
     username = forms.CharField(max_length=32,
                                required=True,
                                widget=forms.TextInput(attrs={
@@ -78,12 +85,15 @@ class UpdateUserForm(forms.ModelForm):
                                 }))
 
     class Meta:
+        # настройка формы (связанная с ней модель и ее поля)
         model = Profile
         fields = ['username', 'first_name', 'last_name']
 
 
 class UpdateProfileForm(forms.ModelForm):
+    # форма для обновления полей ПРОФИЛЯ пользователя
     class Meta:
+        # настройка формы (связанная с ней модель и отображаемые поля)
         model = Profile
         fields = ['profile_pic', 'profile_type', 'telegram_username', 'vk_username']
         widgets = {

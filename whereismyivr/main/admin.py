@@ -3,6 +3,7 @@ from .models import Card
 
 
 class CardAdmin(admin.ModelAdmin):
+    # настройка отображения заявки в панели администратора
     list_display = ("user", "title", "type_of_card", "product_image", "customer", "consultant", "performer", "partner")
     list_filter = ("type_of_card", "customer", "consultant", "performer", "partner")
     search_fields = ("title",)

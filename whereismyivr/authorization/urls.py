@@ -1,15 +1,16 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+
 from . import views
-from .views import CustomLoginView, SignupView, ResetPasswordView, ChangePasswordView
 from .forms import LoginForm
+from .views import CustomLoginView, ChangePasswordView, ResetPasswordView, SignupView
+
 
 urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', CustomLoginView.as_view(redirect_authenticated_user=True, template_name='authorization/login.html',
                                            authentication_form=LoginForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    # path('create-profile/', CreateProfileView.as_view(), name='create_profile'),
     path('activate/<uidb64>/<token>', views.activate, name='activate'),
     path('password-reset/', ResetPasswordView.as_view(), name='password_reset'),
     path('password-reset-confirm/<uidb64>/<token>/',
@@ -20,4 +21,5 @@ urlpatterns = [
          name='password_reset_complete'),
     path('profile/', views.profile, name='users_profile'),
     path('password-change/', ChangePasswordView.as_view(), name='password_change'),
+    path('email-change/', views.change_email, name='email_change')
 ]

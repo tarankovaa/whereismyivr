@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 
 class Card(models.Model):
+    # модель заявки
     RESEARCH = "RE"
     PROJECT = "PR"
     TYPE_OF_APP_CHOICES = (
@@ -61,23 +62,28 @@ class Card(models.Model):
     created_on = models.DateTimeField("Дата создания", default=datetime.now)
 
     class Meta:
+        # настройка модели (отображаемое имя)
         verbose_name = "Карточка"
         verbose_name_plural = "Карточки"
 
     def __str__(self):
+        # возвращает строковое представление объекта заявки - название
         return self.title
 
     def get_type_of_card(self):
+        # возвращает тип заявки - проект или исследование
         if self.type_of_card == self.RESEARCH:
             return "Исследование"
         return "Проект"
 
     def get_field_of_card(self):
+        # возвращает область проекта или исследования
         for field in self.TYPE_OF_FIELD_CHOICES:
             if field[0] == self.field_of_card:
                 return field[1]
 
     def get_search_for(self):
+        # возвращает разыскиваемые должности
         search_for = []
         if self.customer:
             search_for.append("Заказчик")

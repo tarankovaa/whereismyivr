@@ -1,22 +1,24 @@
-from django.views import View
-from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.contrib.auth.views import LoginView, PasswordResetView, PasswordChangeView
-from django.contrib.auth.models import User
-from django.template.loader import render_to_string
-from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView
+from django.core.mail import EmailMessage
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.sites.shortcuts import get_current_site
+from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes, force_str
 from django.utils.safestring import mark_safe
-from django.urls import reverse_lazy
-from django.contrib.messages.views import SuccessMessageMixin
-from django.core.mail import EmailMessage
+from django.views import View
+
 from .forms import LoginForm, SignupForm, UpdateUserForm, UpdateProfileForm
 from .tokens import account_activation_token
 
 
 class SignupView(View):
+    # обработка страницы регистрации пользователя
     form_class = SignupForm
     template_name = 'authorization/signup.html'
 
@@ -25,6 +27,7 @@ class SignupView(View):
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
+        # регистрация нового пользователя
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
@@ -35,12 +38,14 @@ class SignupView(View):
         return render(request, self.template_name, {'form': form})
 
     def dispatch(self, request, *args, **kwargs):
+        # ограничение доступа к странице
         if request.user.is_authenticated:
             return redirect('home')
         return super(SignupView, self).dispatch(request, *args, **kwargs)
 
 
 def activateEmail(request, user, to_email):
+    # отправка ссылки для активации на email
     mail_subject = 'where is my ivr? Активируйте ваш аккаунт'
     message = render_to_string('authorization/activate_account_email.html', {
         'user': user.username,
@@ -60,6 +65,7 @@ def activateEmail(request, user, to_email):
 
 
 def activate(request, uidb64, token):
+    # обработка активации пользователя
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
@@ -79,9 +85,11 @@ def activate(request, uidb64, token):
 
 
 class CustomLoginView(LoginView):
+    # расширение функционала класса входа
     form_class = LoginForm
 
     def form_valid(self, form):
+        # обработка поля Запомнить меня
         remember_me = form.cleaned_data.get('remember_me')
         if not remember_me:
             self.request.session.set_expiry(0)
@@ -90,6 +98,7 @@ class CustomLoginView(LoginView):
 
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    # настройка параметров сброса пароля
     template_name = 'authorization/password_reset.html'
     email_template_name = 'authorization/password_reset_email.html'
     subject_template_name = 'authorization/password_reset_subject'
@@ -99,6 +108,7 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
 
 
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
+    # настройка параметров смены пароля
     template_name = 'authorization/change_password.html'
     success_message = "Пароль успешно изменен"
     success_url = reverse_lazy('home')
@@ -106,6 +116,7 @@ class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
 
 @login_required
 def profile(request):
+    # страница редактирования профиля пользователя
     if request.method == 'POST':
         user_form = UpdateUserForm(request.POST, instance=request.user)
         profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
@@ -121,3 +132,10 @@ def profile(request):
         profile_form = UpdateProfileForm(instance=request.user.profile)
 
     return render(request, 'authorization/profile.html', {'user_form': user_form, 'profile_form': profile_form})
+
+
+@login_required
+def change_email(request):
+    # смена email (не реализовано)
+    messages.error(request, "К сожалению, в настоящее время невозможно изменить электронный адрес. Попробуйте позже")
+    return redirect('users_profile')

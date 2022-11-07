@@ -2,11 +2,13 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.utils.safestring import mark_safe
 from django.views import View
+
 from .models import Card
-from .forms import CreateCardForm, FilterForm
+from .forms import FilterForm, CreateCardForm
 
 
 def index(request):
+    # обработка главной страницы (вывод всех заявок и фильтрация)
     if not request.user.is_authenticated:
         messages.error(request, mark_safe('<a href="/login">Войдите</a>, чтобы просматривать заявки'))
         return render(request, 'main/home.html', {'cards': [],
@@ -28,6 +30,7 @@ def index(request):
 
 
 def search(request, param):
+    # поиск по должностям
     if not request.user.is_authenticated:
         messages.error(request, mark_safe('<a href="/login">Войдите</a>, чтобы просматривать заявки'))
         return render(request, 'main/home.html', {'cards': [],
@@ -58,6 +61,7 @@ def search(request, param):
 
 
 def get_cards(form, all_cards):
+    # получить заявки, соответствующие фильтрации
     cards = all_cards[:0]
     if form.cleaned_data.get('it_project'):
         cards = cards.union(all_cards.filter(field_of_card='it').filter(type_of_card=Card.PROJECT))
@@ -120,14 +124,17 @@ def get_cards(form, all_cards):
 
 
 class CreateCardView(View):
+    # создание заявки
     form_class = CreateCardForm
     template_name = 'main/create_card.html'
 
     def get(self, request, *args, **kwargs):
+        # обработка гет-запроса
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
+        # обработка данных из формы, добавление заявки в базу данных
         form = self.form_class(request.POST)
         if form.is_valid():
             card = form.save(commit=False)
@@ -137,6 +144,7 @@ class CreateCardView(View):
         return render(request, self.template_name, {'form': form})
 
     def dispatch(self, request, *args, **kwargs):
+        # ограничения на работу со страницей
         if not request.user.is_authenticated:
             return redirect('/login/?next=/create-card/')
         if not request.user.profile.is_filled:

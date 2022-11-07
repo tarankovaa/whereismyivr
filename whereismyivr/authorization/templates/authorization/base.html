@@ -16,6 +16,7 @@
                 <a href="/" class="navbar-brand">where is my ivr?</a>
                 <div class="navbar-nav ml-auto">
                     {% if user.is_authenticated %}
+                    <a href="{% url 'create_card' %}" class="nav-item nav-link">Создать заявку</a>
                     <a href="{% url 'logout' %}" class="nav-item nav-link">Выйти</a>
                     {% endif %}
                 </div>
