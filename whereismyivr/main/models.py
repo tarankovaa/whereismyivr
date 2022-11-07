@@ -3,6 +3,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+def get_keys_type_of_field_choices(choices):
+    # ключи выбора области заявки
+    key_choices = []
+    for choice in choices:
+        key_choices.append(choice[0])
+    return tuple(key_choices)
+
+
 class Card(models.Model):
     # модель заявки
     RESEARCH = "RE"
@@ -36,6 +44,9 @@ class Card(models.Model):
         ("philosophy", "Философия — исследование"),
         ("economy", "Экономика — исследование"),
     )
+
+    KEYS_TYPE_OF_FIELD_CHOICES = get_keys_type_of_field_choices(TYPE_OF_FIELD_CHOICES)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     title = models.TextField("Название", blank=False)

@@ -63,63 +63,9 @@ def search(request, param):
 def get_cards(form, all_cards):
     # получить заявки, соответствующие фильтрации
     cards = all_cards[:0]
-    if form.cleaned_data.get('it_project'):
-        cards = cards.union(all_cards.filter(field_of_card='it_project'))
-    if form.cleaned_data.get('business_project'):
-        cards = cards.union(all_cards.filter(field_of_card='business_project'))
-    if form.cleaned_data.get('design'):
-        cards = cards.union(all_cards.filter(field_of_card='design'))
-    if form.cleaned_data.get('publishing'):
-        cards = cards.union(all_cards.filter(field_of_card='publishing'))
-    if form.cleaned_data.get('engineering'):
-        cards = cards.union(all_cards.filter(field_of_card='engineering'))
-    if form.cleaned_data.get('media'):
-        cards = cards.union(all_cards.filter(field_of_card='media'))
-    if form.cleaned_data.get('education_project'):
-        cards = cards.union(all_cards.filter(field_of_card='education_project'))
-    if form.cleaned_data.get('events'):
-        cards = cards.union(all_cards.filter(field_of_card='events'))
-    if form.cleaned_data.get('it_research'):
-        cards = cards.union(all_cards.filter(field_of_card='it_research'))
-    if form.cleaned_data.get('business_research'):
-        cards = cards.union(all_cards.filter(field_of_card='business_research'))
-    if form.cleaned_data.get('oriental_studies'):
-        cards = cards.union(
-            all_cards.filter(field_of_card='oriental_studies'))
-    if form.cleaned_data.get('natural_sciences'):
-        cards = cards.union(
-            all_cards.filter(field_of_card='natural_sciences'))
-    if form.cleaned_data.get('art'):
-        cards = cards.union(all_cards.filter(field_of_card='art'))
-    if form.cleaned_data.get('history'):
-        cards = cards.union(all_cards.filter(field_of_card='history'))
-    if form.cleaned_data.get('culturology'):
-        cards = cards.union(all_cards.filter(field_of_card='culturology'))
-    if form.cleaned_data.get('marketing'):
-        cards = cards.union(all_cards.filter(field_of_card='marketing'))
-    if form.cleaned_data.get('maths'):
-        cards = cards.union(all_cards.filter(field_of_card='maths'))
-    if form.cleaned_data.get('management'):
-        cards = cards.union(
-            all_cards.filter(field_of_card='management'))
-    if form.cleaned_data.get('linguistics'):
-        cards = cards.union(all_cards.filter(field_of_card='linguistics'))
-    if form.cleaned_data.get('education_research'):
-        cards = cards.union(all_cards.filter(field_of_card='education_research'))
-    if form.cleaned_data.get('politics'):
-        cards = cards.union(all_cards.filter(field_of_card='politics'))
-    if form.cleaned_data.get('right'):
-        cards = cards.union(all_cards.filter(field_of_card='right'))
-    if form.cleaned_data.get('psychology'):
-        cards = cards.union(all_cards.filter(field_of_card='psychology'))
-    if form.cleaned_data.get('sociology'):
-        cards = cards.union(all_cards.filter(field_of_card='sociology'))
-    if form.cleaned_data.get('philology'):
-        cards = cards.union(all_cards.filter(field_of_card='philology'))
-    if form.cleaned_data.get('philosophy'):
-        cards = cards.union(all_cards.filter(field_of_card='philosophy'))
-    if form.cleaned_data.get('economy'):
-        cards = cards.union(all_cards.filter(field_of_card='economy'))
+    for value in Card.KEYS_TYPE_OF_FIELD_CHOICES:
+        if value in form.data:
+            cards = cards.union(all_cards.filter(field_of_card=value))
     return cards
 
 
@@ -152,7 +98,7 @@ class CreateCardView(View):
             Заполните его во вкладке <a href="/profile">профиль</a>"""))
             return redirect('home')
         if request.user.profile.profile_type == "CO":
-            messages.error(request, """Ваш тип пользователя не позволяет создать карточку. 
-            Вы можете поменять его в настройках <a href="/profile">профиля</a>""")
+            messages.error(request, mark_safe("""Ваш тип пользователя не позволяет создать карточку. 
+            Вы можете поменять его в настройках <a href="/profile">профиля</a>"""))
             return redirect('home')
         return super(CreateCardView, self).dispatch(request, *args, **kwargs)
