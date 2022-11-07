@@ -194,7 +194,8 @@
     <button type="submit" class="btn btn-dark">Применить</button>
 </form>
 {% endif %}
-{% if request.user.is_authenticated and not cards %}
+{% if request.user.is_authenticated %}
+{% if not cards %}
 <label class="mb-3">Найдено заявок: {{ cards|length }}</label>
 <div class="col-lg-5 mt">
     <div class="card shadow-lg border-0 rounded-lg mt-0 mb-3">
@@ -267,5 +268,6 @@
     </div>
 </div>
 {% endfor %}
+{% endif %}
 {% endif %}
 {% endblock %}
